@@ -5,7 +5,9 @@
 #include<math.h>
 int validation(int argc, string valid[]);
 int stringToInt(string numberString);
+bool isACharacter(char plaintext);
 int plainToCaesar(char plaintext,int key) ;
+void ecrypt(string plaintext,int key);
 int main(int argc, string argv[]) 
 {
     if(validation(argc, argv) == 1) {
@@ -16,19 +18,24 @@ int main(int argc, string argv[])
         int key = stringToInt(argv[1]);
         string plaintext = get_string("Plain Text:\t");
         printf("Encrypted Text:\t");
-        for(int count = 0,n=strlen(plaintext); count < n; count++){
-        if (((plaintext[count] >='a')&&(plaintext[count]<='z'))||((plaintext[count] >='A')&&(plaintext[count]<='Z'))){
-        char cipherText=plainToCaesar(plaintext[count],key);
-        printf("%c",cipherText);
-        }
-        else { 
-        printf("%c",plaintext[count]); 
-        }  
-
-        } printf("\n");
+        ecrypt(plaintext,key);
+        printf("\n");
     }
- }
-
+}
+int validation(int numberOfArguments, string arguments[])
+{
+    if(numberOfArguments != 2){
+        return 1;
+    }
+    int flag = 0;
+        for (int count = 0 , n = strlen(arguments[1]) ; count < n ; count++) {
+            if (!isdigit(arguments[1][count])) {
+                flag = 1;
+                break;
+            }
+        }
+    return flag;
+}
 
 int stringToInt(string numberString) {
     int number = 0;
@@ -39,19 +46,8 @@ int stringToInt(string numberString) {
     }  
     return number;
 }
-int validation(int numberOfArguments, string arguments[])
-{
-    if(numberOfArguments != 2) {
-        return 1;
-    }
-    int flag = 0;
-        for (int count =0 , n=strlen(arguments[1]) ; count < n ; count++) {
-            if (!isdigit(arguments[1][count])) {
-                flag = 1;
-               break;
-            }
-        }
-    return flag;
+bool isACharacter(char plaintext){
+     return (((plaintext >='a')&&(plaintext<='z'))||((plaintext >='A')&&(plaintext <='Z'))) ;
 }
 int plainToCaesar(char plaintext,int key){
     if (islower(plaintext)!=0){
@@ -61,4 +57,16 @@ int plainToCaesar(char plaintext,int key){
         plaintext = (((plaintext-65) + key) % 26) + 65 ;
        }
     return plaintext;
+}
+void ecrypt(string plaintext , int key){
+    for(int count = 0,n=strlen(plaintext); count < n; count++){
+            char plaintextcount = plaintext[count];
+            if (isACharacter(plaintextcount)){
+                char cipherText = plainToCaesar(plaintextcount,key);
+                printf("%c",cipherText);
+            }
+            else { 
+                printf("%c",plaintextcount); 
+            } 
+        } 
 }
